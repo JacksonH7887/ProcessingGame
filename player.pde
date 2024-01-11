@@ -8,7 +8,7 @@ class player{
     vel = new PVector(0, 0);
     size = new PVector(50, 50);
   }
-  ll
+  
   void display(){
     ellipse(pos.x, pos.y, 50, 50);
     fill(0, 0, 0);
