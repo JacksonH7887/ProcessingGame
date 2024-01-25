@@ -1,29 +1,32 @@
 class Bullet extends Sprite {
-
-    PVector vel; // Velocity vector
-
-    Bullet(float x, float y, int team, PVector direction) {
+    
+    Bullet(float x, float y, int team) {
         super(x, y, 10, 10); // invoke parent constructor
         this.team = team;
-        this.vel = direction.copy().mult(15); // Adjust the speed as needed
+        calculateVelocity();
     }
 
-    Bullet(PVector pos, int team, PVector direction) {
-        this(pos.x, pos.y, team, direction);
+    Bullet(PVector pos, int team) {
+        this(pos.x, pos.y, team);
     }
-
+     void calculateVelocity() {
+        PVector mouse = new PVector(mouseX, mouseY);
+        vel = PVector.sub(mouse, pos);
+        vel.normalize();
+        vel.mult(15); // Adjust the speed as needed
+    }
+    
     @Override
     void update() {
         pos.add(vel);
     }
-
     @Override
     void display() {
         float direction = atan2(vel.y, vel.x);
-
+        
         pushMatrix();
         translate(pos.x, pos.y);
-        rotate(direction - PI / 2);
+        rotate(direction + PI / 2); 
 
         fill(255);
         triangle(-size.x / 2, -size.y / 2, size.x / 2, -size.y / 2, 0, size.y + 10);

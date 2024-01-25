@@ -14,7 +14,7 @@ class Sprite {
     
     void display() {
         fill(255);
-        rect(pos.x, pos.y, size.x, size.y);
+        ellipse(pos.x, pos.y, size.x, size.y);
     }
     
     void handleCollision() {

@@ -17,11 +17,37 @@ class SpriteManager {
         active.add(obj);
     }
     
+    int respawnTimer = 0;
+    int respawnInterval = 1000;
+    int lastUpdateTime;
     void manage() {
         moveEverything();
         checkCollisions();    
         bringOutTheDead();
         drawEverything();
+        
+        respawnTimer += millis() - lastUpdateTime;
+        lastUpdateTime = millis();
+
+        if (respawnTimer >= respawnInterval) {
+            respawnInvaders();
+            respawnTimer = 0;
+        }
+    }
+    
+    void respawnInvaders() {
+        float rand = random(1);
+
+        if (rand < 0.5) {
+            // 50%
+            spawn(new Invader(250, 50));
+        } else if (rand < 0.85) {
+            // 35%
+            spawn(new Invader(400, 150));
+        } else {
+            // 15%
+            spawn(new Invader(550, 250));
+        }
     }
     
     void moveEverything() {
@@ -57,9 +83,9 @@ class SpriteManager {
     }
     
     boolean collision(Sprite a, Sprite b) {
-        // assumes equal w and h
-        float r1 = a.size.x / 2.0;
-        float r2 = b.size.x / 2.0;
-        return r1 + r2 > dist(a.pos.x, a.pos.y, b.pos.x, b.pos.y);
+        boolean xOverlap = Math.abs(a.pos.x - b.pos.x) * 2 < (a.size.x + b.size.x);
+        boolean yOverlap = Math.abs(a.pos.y - b.pos.y) * 2 < (a.size.y + b.size.y);
+        return xOverlap && yOverlap;
     }
+
 }
